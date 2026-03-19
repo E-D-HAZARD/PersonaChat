@@ -1,3 +1,9 @@
+---
+name: personachat
+description: 基于 MBTI 及情感推断的类人聊天话术生成引擎
+metadata: {"clawdbot":{"emoji":"🤖","requires":{"bins":["personachat"]}}}
+---
+
 # PersonaChat Skill
 
 > 类人聊天风格回复系统

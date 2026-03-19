@@ -1,0 +1,2 @@
+[console_scripts]
+personachat = persona.cli:main
