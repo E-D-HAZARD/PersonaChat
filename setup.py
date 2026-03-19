@@ -6,7 +6,9 @@ setup(
     description="基于 MBTI 及情感推断的类人聊天话术生成引擎 (OpenClaw Skill)",
     packages=find_packages(),
     include_package_data=True,
-    install_requires=[],
+    install_requires=[
+        "openai>=1.0.0"
+    ],
     entry_points={
         "console_scripts": [
             "personachat=persona.cli:main",

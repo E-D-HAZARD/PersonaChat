@@ -2,9 +2,11 @@ README.md
 setup.py
 persona/__init__.py
 persona/cli.py
+persona/llm.py
 personachat.egg-info/PKG-INFO
 personachat.egg-info/SOURCES.txt
 personachat.egg-info/dependency_links.txt
 personachat.egg-info/entry_points.txt
+personachat.egg-info/requires.txt
 personachat.egg-info/top_level.txt
 test/test.py

@@ -7,6 +7,7 @@ def main():
     parser.add_argument("--persona", type=str, default="ENFJ", help="MBTI人格基调 (如 ENFJ, ENTP)")
     parser.add_argument("--corpus", type=str, default=None, help="专用行业语料库选择 (如 banking, medical)")
     parser.add_argument("--emotion", type=str, default=None, help="强制指定情绪基调而非通过 message 检测 (如 happy, sad, angry)")
+    parser.add_argument("--memory-dir", type=str, default=None, help="手动指定 OpenClaw 记忆查找的起始目录")
     
     args = parser.parse_args()
     
@@ -17,7 +18,8 @@ def main():
             message=args.message, 
             persona=args.persona, 
             corpus=args.corpus,
-            emotion=args.emotion
+            emotion=args.emotion,
+            memory_dir=args.memory_dir
         )
         print(reply)
     except Exception as e:

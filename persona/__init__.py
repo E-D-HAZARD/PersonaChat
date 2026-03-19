@@ -59,7 +59,8 @@ class PersonaChat:
         message: str, 
         persona: str = "ENFJ", 
         corpus: Optional[str] = None,
-        emotion: Optional[str] = None
+        emotion: Optional[str] = None,
+        memory_dir: Optional[str] = None
     ) -> str:
         """
         生成类人回复
@@ -88,20 +89,35 @@ class PersonaChat:
             else:
                 emotion = "neutral"
 
+        # 尝试挂载 Memory
+        from .llm import find_openclaw_memory, generate_via_llm
+        memory_ctx = ""
+        # 针对需要个性化的设定，或者主动传参时去寻找上下文约束
+        if persona == "auto" or memory_dir:
+            memory_ctx = find_openclaw_memory(memory_dir)
+
         # 识别和兼容 auto 人格
         if persona == "auto":
-            import warnings
-            warnings.warn("Memory module not connected. Falling back to ENFJ for 'auto' persona.", UserWarning)
+            if not memory_ctx:
+                import warnings
+                warnings.warn("Memory module not connected or empty. Falling back to ENFJ for 'auto' persona.", UserWarning)
+            # 即便有了 Memory，基础基调也默认借用 ENFJ 的风格参数以赋予大模型扮演人格
             persona = "ENFJ"
             
         # 验证人格
         if persona not in self.personas:
             persona = "ENFJ"  # 默认
-        
+            
         # 获取人格配置
         persona_config = self.personas[persona]
         
-        # 这里不再是无脑随机，加入基于 message 的初步匹配支持
+        # --- LLM 智能生成优先拦截 ---
+        llm_reply = generate_via_llm(message, persona_config, emotion, memory_ctx)
+        if llm_reply:
+            return llm_reply
+        # ---------------------------
+        
+        # 降级：基于 JSON 模板与 message 的初步匹配支持
         if corpus and corpus in self.corpus:
             examples = self.corpus[corpus]["examples"].get(persona, [])
             if examples:
