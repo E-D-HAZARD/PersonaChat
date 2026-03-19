@@ -48,19 +48,36 @@ def test_corpus():
             print(f"{persona}: {reply}")
 
 
-def test_random():
-    """随机生成测试"""
+def test_message_relevance():
+    """测试基于上下文和情绪的情境推断"""
     chat = PersonaChat()
     
     print("\n" + "=" * 50)
-    print("随机生成测试（同一输入多次）")
+    print("上下文与情绪感知测试")
     print("=" * 50)
     
-    message = "今天天气真好"
+    messages = [
+        "太棒了，谢谢你！",            # 走 happy 情绪并配发合适 emoji
+        "怎么回事，太慢了我要投诉",    # 走 angry
+        "心情有点难过唉",              # 走 sad
+    ]
     
-    for i in range(5):
-        reply = chat.generate(message, persona="ESFP")
-        print(f"{i+1}: {reply}")
+    for msg in messages:
+        reply = chat.generate(msg, persona="ENFJ")
+        print(f"用户: {msg}")
+        print(f"回复: {reply}\n")
+
+
+def test_auto_persona():
+    """测试 auto 人格及异常处理"""
+    chat = PersonaChat()
+    
+    print("\n" + "=" * 50)
+    print("Auto 人格及兜底测试")
+    print("=" * 50)
+    
+    reply = chat.generate("你好", persona="auto")
+    print(f"提示中应有 Warning，自动回落-> {reply}")
 
 
 def test_persona_info():
@@ -81,6 +98,7 @@ def test_persona_info():
 if __name__ == "__main__":
     test_basic()
     test_corpus()
-    test_random()
+    test_message_relevance()
+    test_auto_persona()
     test_persona_info()
     print("\n✅ 所有测试完成!")
